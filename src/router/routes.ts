@@ -64,6 +64,27 @@ export const constantRoute = [
     },
   },
   {
+    path: '/mychart',
+    component: () => import('@/layout/Index.vue'),
+    redirect: '/mychart',
+    meta: {
+      title: '图表管理',
+      hidden: false,
+      icon: 'MessageBox',
+    },
+    children: [
+      {
+        path: '/mychart',
+        component: () => import('@/views/my-chart/MyChart.vue'),
+        meta: {
+          title: '我的图表',
+          hidden: false,
+          icon: 'MessageBox',
+        },
+      },
+    ],
+  },
+  {
     path: '/404',
     component: () => import('@/views/404/Index.vue'),
     name: '404',

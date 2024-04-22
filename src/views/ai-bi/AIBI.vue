@@ -126,6 +126,7 @@ const handleExceed = () => {
 
 // 发送网络请求
 const onSubmit = async () => {
+  myChart.setOption({})
   isLoading.value = true
   isDisable.value = true
   try {
