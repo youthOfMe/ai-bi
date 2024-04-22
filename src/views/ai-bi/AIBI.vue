@@ -43,20 +43,20 @@
             </el-upload>
           </el-form-item>
           <el-form-item>
-            <el-button type="primary" @click="onSubmit">提交</el-button>
-            <el-button>重置</el-button>
+            <el-button type="primary" @click="onSubmit" :loading="isLoading">提交</el-button>
+            <el-button :disabled="isDisable" @click="resetForm">重置</el-button>
           </el-form-item>
         </el-form>
       </el-card>
     </el-col>
     <el-col :span="12">
-      <el-card>
+      <el-card v-loading="isLoading">
         <template #header>
           <el-text class="mx-1" type="primary">分析结论</el-text>
         </template>
         <p>{{ chartData }}</p>
       </el-card>
-      <el-card style="margin-top: 10px">
+      <el-card style="margin-top: 10px" v-loading="isLoading">
         <template #header>
           <el-text class="mx-1" type="primary">可视化图表</el-text>
         </template>
@@ -107,20 +107,43 @@ onMounted(() => {
   myChart = echarts.init(map.value)
 })
 
+// 控制加载状态
+const isLoading = ref(false)
+// 控制禁用状态
+const isDisable = ref(false)
+
+// 重置表单数据
+const resetForm = () => {
+  formResearchChart.goal = ''
+  formResearchChart.name = ''
+  formResearchChart.chartType = ''
+}
+
+// 上传超出
+const handleExceed = () => {
+  ElMessage.error('一次只能上传一个图表文件')
+}
+
 // 发送网络请求
 const onSubmit = async () => {
+  isLoading.value = true
+  isDisable.value = true
   try {
     const res = await genChartByAiUsingPOST(formResearchChart, fd)
-    console.log(formResearchChart)
 
     if (!res?.data) {
       ElMessage.error('分析失败')
+      isLoading.value = false
+      isDisable.value = false
     } else {
       ElMessage.success('分析成功')
+      // myChart.setOption([])
       const chartOption = JSON.parse(res.data.genChart ?? '')
       if (!chartOption) {
         throw new Error('图表代码解析错误')
       } else {
+        isLoading.value = false
+        isDisable.value = false
         chartData.value = res.data.genResult
         chartOptions.value = chartOption
         // setChart(res.data)
