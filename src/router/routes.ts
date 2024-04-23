@@ -85,6 +85,24 @@ export const constantRoute = [
     ],
   },
   {
+    path: '/screen',
+    component: () => import('@/views/my-chart/MyChart.vue'),
+    meta: {
+      title: '数据化大屏',
+      hidden: false,
+      icon: 'PictureRounded',
+    },
+  },
+  {
+    path: '/screenAI',
+    component: () => import('@/views/my-chart/MyChart.vue'),
+    meta: {
+      title: '智能化大屏',
+      hidden: false,
+      icon: 'Cpu',
+    },
+  },
+  {
     path: '/404',
     component: () => import('@/views/404/Index.vue'),
     name: '404',
